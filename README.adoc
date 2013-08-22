@@ -1,0 +1,51 @@
+:hivemq-link: http://www.hivemq.com
+:hivemq-plugin-docs-link: http://www.hivemq.com/docs/plugins/1.4.0/
+:hivemq-plugin-docs-archetype-link: http://www.hivemq.com/docs/plugins/1.4.0/#maven-archetype-chapter
+:hivemq-blog-tools: http://www.hivemq.com/overview-of-mqtt-client-tools/
+:hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/1.4.0/#hivemqdocs_overview_of_all_callbacks
+
+== HiveMQ Hello World Plugin
+
+=== Purpose
+
+This Hello World plugin can be used as a foundation for writing your (first) {hivemq-link}[HiveMQ] plugin. Although {hivemq-plugin-docs-archetype-link}[there is a Maven Archetype available] to generate your Hello World plugin right from the IDE, you can use this example project if you don't like to use the Archetype.
+
+We strongly recommend to read the {hivemq-plugin-docs-link}[HiveMQ Plugin Documentation] to grasp the core concepts of HiveMQ plugin development.
+
+=== What you'll get
+
+This Hello World plugin implements a few HiveMQ Callbacks to get you started:
+
+* A callback when a client connects
+* A callback when a client disconnects
+* A callback when a client publishes something
+* A callback when HiveMQ starts
+
+
+Also, this hello world plugin can reads configurations from a properties file (and reloads it every 5 minutes).
+
+There's a Maven profile configured which starts HiveMQ with your plugin. Just enable the profile and run the +package+ Maven phase.
+
+IMPORTANT: Don't forget to set the path to your HiveMQ installation in the +pom.xml+. There's a "FIXME:" in the +pom.xml+ to remind you of that.
+
+The plugin is documented with javadoc which explains what's going on. Please don't forget to read the extensive {hivemq-plugin-docs-link}[HiveMQ Plugin Documentation].
+
+=== Trying the plugin
+
+. Execute the +package+ goal from Maven with the profile _RunWithHiveMQ_ activated. (Need help?: Consult: http://maven.apache.org/guides/introduction/introduction-to-profiles.html)
+. Now HiveMQ should be running *with* your plugin installed.
+. Connect with a {hivemq-blog-tools} MQTT client of your choice and publish something. You should see some log output.
+
+
+=== Next steps
+
+Awesome, you got your first HiveMQ plugin working. Now grab a coffee and prepare for the next steps:
+
+* Read about the available HiveMQ callbacks {hivemq-callbacks-overview-link}[here]. footnote:[There are also low level protocol callbacks available. See https://github.com/hivemq/hivemq-spi/tree/master/src/main/java/com/dcsquare/hivemq/spi/callback/lowlevel]
+* Implement a great plugin. Bring your JDBC driver and do some database fun. Integrate with your favourite web service. There are no limits :-)
+* Blog about your awesome plugin. Tell us and if you like we can add your plugin to the plugin registry on http://www.hivemq.com
+
+
+ === Need help?
+
+ If you encounter any problems, we are happy to help you. We are hangin' around in IRC on freenode (irc.freenode.net) on channel #hivemq.
