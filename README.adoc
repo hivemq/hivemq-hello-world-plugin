@@ -33,7 +33,7 @@ The plugin is documented with javadoc which explains what's going on. Please don
 
 === Trying the plugin
 
-. Execute the +package+ goal from Maven with the profile _RunWithHiveMQ_ activated. (Need help?: Consult: http://maven.apache.org/guides/introduction/introduction-to-profiles.html)
+. Execute the +package+ goal from Maven with the profile _RunWithHiveMQ_ activated. (Need help?: Consult: {http://maven.apache.org/guides/introduction/introduction-to-profiles.html})
 . Now HiveMQ should be running *with* your plugin installed.
 . Connect with a {hivemq-blog-tools}[MQTT client] of your choice and publish something. You should see some log output.
 
