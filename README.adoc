@@ -4,6 +4,7 @@
 :hivemq-blog-tools: http://www.hivemq.com/overview-of-mqtt-client-tools/
 :hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/1.4.0/#hivemqdocs_overview_of_all_callbacks
 :github-low-level-callbacks: https://github.com/hivemq/hivemq-spi/tree/master/src/main/java/com/dcsquare/hivemq/spi/callback/lowlevel
+:maven-documentation-profile-link: http://maven.apache.org/guides/introduction/introduction-to-profiles.html
 
 == HiveMQ Hello World Plugin
 
@@ -33,7 +34,7 @@ The plugin is documented with javadoc which explains what's going on. Please don
 
 === Trying the plugin
 
-. Execute the +package+ goal from Maven with the profile _RunWithHiveMQ_ activated. (Need help?: Consult: {http://maven.apache.org/guides/introduction/introduction-to-profiles.html})
+. Execute the +package+ goal from Maven with the profile _RunWithHiveMQ_ activated. (Need help?: Consult: {maven-documentation-profile-link}[The maven documentation])
 . Now HiveMQ should be running *with* your plugin installed.
 . Connect with a {hivemq-blog-tools}[MQTT client] of your choice and publish something. You should see some log output.
 
