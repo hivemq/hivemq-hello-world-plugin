@@ -1,4 +1,4 @@
-package callbacks;
+package com.acme.callbacks;
 
 import com.dcsquare.hivemq.spi.callback.events.OnDisconnectCallback;
 import com.dcsquare.hivemq.spi.security.ClientData;

@@ -1,4 +1,4 @@
-package callbacks;
+package com.acme.callbacks;
 
 import com.dcsquare.hivemq.spi.callback.CallbackPriority;
 import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;

@@ -1,4 +1,4 @@
-package plugin;
+package com.acme.plugin;
 
 import com.dcsquare.hivemq.spi.HiveMQPluginModule;
 import com.dcsquare.hivemq.spi.PluginEntryPoint;

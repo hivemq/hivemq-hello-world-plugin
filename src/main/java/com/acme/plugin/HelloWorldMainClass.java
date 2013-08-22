@@ -1,9 +1,9 @@
-package plugin;
+package com.acme.plugin;
 
-import callbacks.ClientConnect;
-import callbacks.ClientDisconnect;
-import callbacks.HiveMQStart;
-import callbacks.PublishReceived;
+import com.acme.callbacks.ClientConnect;
+import com.acme.callbacks.ClientDisconnect;
+import com.acme.callbacks.HiveMQStart;
+import com.acme.callbacks.PublishReceived;
 import com.dcsquare.hivemq.spi.PluginEntryPoint;
 import com.dcsquare.hivemq.spi.callback.registry.CallbackRegistry;
 import org.apache.commons.configuration.Configuration;
