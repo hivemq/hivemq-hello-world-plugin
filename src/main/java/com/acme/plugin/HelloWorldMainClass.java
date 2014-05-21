@@ -22,6 +22,11 @@ import com.acme.callbacks.HiveMQStart;
 import com.acme.callbacks.PublishReceived;
 import com.dcsquare.hivemq.spi.PluginEntryPoint;
 import com.dcsquare.hivemq.spi.callback.registry.CallbackRegistry;
+import com.dcsquare.hivemq.spi.message.QoS;
+import com.dcsquare.hivemq.spi.message.RetainedMessage;
+import com.dcsquare.hivemq.spi.security.ClientData;
+import com.dcsquare.hivemq.spi.services.ClientService;
+import com.dcsquare.hivemq.spi.services.RetainedMessageStore;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +43,25 @@ public class HelloWorldMainClass extends PluginEntryPoint {
 
     private final Configuration configuration;
 
+    private final RetainedMessageStore retainedMessageStore;
+    private final ClientService clientService;
+
+    private final ClientConnect clientConnect;
+    private final PublishReceived publishReceived;
+
     /**
      * @param configuration Injected configuration, which is declared in the {@link HelloWorldPluginModule}.
      */
+
     @Inject
-    public HelloWorldMainClass(Configuration configuration) {
+    public HelloWorldMainClass(Configuration configuration, final RetainedMessageStore retainedMessageStore,
+                               final ClientConnect clientConnect, final ClientService clientService,
+                               final PublishReceived publishReceived) {
         this.configuration = configuration;
+        this.retainedMessageStore = retainedMessageStore;
+        this.clientService = clientService;
+        this.clientConnect = clientConnect;
+        this.publishReceived = publishReceived;
     }
 
     /**
@@ -56,10 +74,21 @@ public class HelloWorldMainClass extends PluginEntryPoint {
         CallbackRegistry callbackRegistry = getCallbackRegistry();
 
         callbackRegistry.addCallback(new HiveMQStart());
-        callbackRegistry.addCallback(new ClientConnect());
+        callbackRegistry.addCallback(clientConnect);
         callbackRegistry.addCallback(new ClientDisconnect());
-        callbackRegistry.addCallback(new PublishReceived());
+        callbackRegistry.addCallback(publishReceived);
 
         log.info("Plugin configuration property: {}", configuration.getString("myProperty"));
+
+        addRetainedMessage("/default", "Hello World.");
+    }
+
+    /**
+     * Programmatically add a new Retained Message.
+     */
+    public void addRetainedMessage(String topic, String message) {
+
+        if (!retainedMessageStore.contains(new RetainedMessage(topic, new byte[]{}, QoS.valueOf(0))))
+            retainedMessageStore.addOrReplace(new RetainedMessage(topic, message.getBytes(), QoS.valueOf(1)));
     }
 }

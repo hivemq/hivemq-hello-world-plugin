@@ -21,7 +21,9 @@ import com.dcsquare.hivemq.spi.callback.events.OnPublishReceivedCallback;
 import com.dcsquare.hivemq.spi.callback.exception.OnPublishReceivedException;
 import com.dcsquare.hivemq.spi.message.PUBLISH;
 import com.dcsquare.hivemq.spi.security.ClientData;
+import com.dcsquare.hivemq.spi.services.PublishService;
 import com.google.common.base.Charsets;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +37,14 @@ import org.slf4j.LoggerFactory;
 public class PublishReceived implements OnPublishReceivedCallback {
 
     Logger logger = LoggerFactory.getLogger(PublishReceived.class);
+
+    PublishService publishService;
+
+    @Inject
+    public PublishReceived(final PublishService publishService) {
+        this.publishService = publishService;
+
+    }
 
     /**
      * This method is called from the HiveMQ, when a new MQTT {@link PUBLISH} message arrives
@@ -52,6 +62,8 @@ public class PublishReceived implements OnPublishReceivedCallback {
         String message = new String(publish.getPayload(), Charsets.UTF_8);
 
         logger.info("Client " + clientID + " sent a message to topic " + topic + ": " + message);
+
+        redirectPublish("/default", publish);
     }
 
     /**
@@ -63,5 +75,14 @@ public class PublishReceived implements OnPublishReceivedCallback {
     @Override
     public int priority() {
         return CallbackPriority.MEDIUM;
+    }
+
+    /**
+     * Copy and redirect a PUBLISH message to a new topic
+     */
+    private void redirectPublish(String newTopic, PUBLISH publish) {
+        PUBLISH copy = PUBLISH.copy(publish);
+        copy.setTopic(newTopic);
+        publishService.publish(copy);
     }
 }

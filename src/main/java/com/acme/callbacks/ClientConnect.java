@@ -20,7 +20,11 @@ import com.dcsquare.hivemq.spi.callback.CallbackPriority;
 import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;
 import com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException;
 import com.dcsquare.hivemq.spi.message.CONNECT;
+import com.dcsquare.hivemq.spi.message.QoS;
+import com.dcsquare.hivemq.spi.message.Topic;
 import com.dcsquare.hivemq.spi.security.ClientData;
+import com.dcsquare.hivemq.spi.services.SubscriptionStore;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +41,12 @@ public class ClientConnect implements OnConnectCallback {
 
     Logger log = LoggerFactory.getLogger(ClientConnect.class);
 
+    final SubscriptionStore subscriptionStore;
+
+    @Inject
+    public ClientConnect(SubscriptionStore subscriptionStore) {
+        this.subscriptionStore = subscriptionStore;
+    }
 
     /**
      * This is the callback method, which is called by the HiveMQ core, if a client has sent,
@@ -51,6 +61,7 @@ public class ClientConnect implements OnConnectCallback {
     @Override
     public void onConnect(CONNECT connect, ClientData clientData) throws RefusedConnectionException {
         log.info("Client {} is connecting", clientData.getClientId());
+        addClientToTopic(clientData.getClientId(), "/default");
     }
 
     /**
@@ -62,5 +73,12 @@ public class ClientConnect implements OnConnectCallback {
     @Override
     public int priority() {
         return CallbackPriority.MEDIUM;
+    }
+
+    /**
+     * Setup a default Subscription
+     */
+    private void addClientToTopic(String clientId, String topic) {
+        subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(1)));
     }
 }
