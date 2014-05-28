@@ -44,7 +44,6 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final Configuration configuration;
 
     private final RetainedMessageStore retainedMessageStore;
-    private final ClientService clientService;
 
     private final ClientConnect clientConnect;
     private final PublishReceived publishReceived;
@@ -55,11 +54,9 @@ public class HelloWorldMainClass extends PluginEntryPoint {
 
     @Inject
     public HelloWorldMainClass(Configuration configuration, final RetainedMessageStore retainedMessageStore,
-                               final ClientConnect clientConnect, final ClientService clientService,
-                               final PublishReceived publishReceived) {
+                               final ClientConnect clientConnect, final PublishReceived publishReceived) {
         this.configuration = configuration;
         this.retainedMessageStore = retainedMessageStore;
-        this.clientService = clientService;
         this.clientConnect = clientConnect;
         this.publishReceived = publishReceived;
     }

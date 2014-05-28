@@ -20,9 +20,12 @@ import com.dcsquare.hivemq.spi.callback.CallbackPriority;
 import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;
 import com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException;
 import com.dcsquare.hivemq.spi.message.CONNECT;
+import com.dcsquare.hivemq.spi.message.PUBLISH;
 import com.dcsquare.hivemq.spi.message.QoS;
 import com.dcsquare.hivemq.spi.message.Topic;
 import com.dcsquare.hivemq.spi.security.ClientData;
+import com.dcsquare.hivemq.spi.services.ClientService;
+import com.dcsquare.hivemq.spi.services.PublishService;
 import com.dcsquare.hivemq.spi.services.SubscriptionStore;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -42,10 +45,14 @@ public class ClientConnect implements OnConnectCallback {
     Logger log = LoggerFactory.getLogger(ClientConnect.class);
 
     final SubscriptionStore subscriptionStore;
+    final ClientService clientService;
+    final PublishService publishService;
 
     @Inject
-    public ClientConnect(SubscriptionStore subscriptionStore) {
+    public ClientConnect(final SubscriptionStore subscriptionStore, final ClientService clientService, final PublishService publishService) {
+        this.publishService = publishService;
         this.subscriptionStore = subscriptionStore;
+        this.clientService = clientService;
     }
 
     /**
@@ -62,6 +69,7 @@ public class ClientConnect implements OnConnectCallback {
     public void onConnect(CONNECT connect, ClientData clientData) throws RefusedConnectionException {
         log.info("Client {} is connecting", clientData.getClientId());
         addClientToTopic(clientData.getClientId(), "/default");
+        publishClientIDs();
     }
 
     /**
@@ -75,10 +83,25 @@ public class ClientConnect implements OnConnectCallback {
         return CallbackPriority.MEDIUM;
     }
 
+    private void publishClientIDs(){
+        String info = "Connected Clients:\n";
+        for(String clientId : clientService.getConnectedClients()){
+            ClientData clientData = clientService.getClientDataForClientId(clientId).get();
+            info += clientData.getClientId()+"\n";
+        }
+
+        PUBLISH infoPublish = new PUBLISH();
+        infoPublish.setTopic("/default");
+        infoPublish.setPayload(info.getBytes());
+        infoPublish.setQoS(QoS.valueOf(0));
+
+        publishService.publish(infoPublish);
+    }
+
     /**
      * Setup a default Subscription
      */
     private void addClientToTopic(String clientId, String topic) {
-        subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(1)));
+        subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(0)));
     }
 }
