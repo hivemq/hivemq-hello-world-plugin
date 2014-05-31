@@ -65,23 +65,25 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
      */
     @Override
     public void onPublishReceived(PUBLISH publish, ClientData clientData) throws OnPublishReceivedException {
-        String clientID = clientData.getClientId();
-        String topic = publish.getTopic();
-        String message = new String(publish.getPayload(), Charsets.UTF_8);
+        if (publish.getTopic().equals("fetch/all/clients")) {
 
-        logger.info("Client " + clientID + " sent a message to topic " + topic + ": " + message);
+            String clientID = clientData.getClientId();
+            String topic = publish.getTopic();
+            String message = new String(publish.getPayload(), Charsets.UTF_8);
 
-        // Get all clients
-        String allClients = getAllClients();
-        publish.setPayload(allClients.getBytes(Charsets.UTF_8));
+            logger.info("Client " + clientID + " sent a message to topic " + topic + ": " + message);
 
-        // This redirects the message with the help of the PublishService
+            // Get all clients
+            String allClients = getAllClients();
+            publish.setPayload(allClients.getBytes(Charsets.UTF_8));
 
-        redirectPublish(allClientsTopic, publish);
+            // This redirects the message with the help of the PublishService
 
-        logger.info("Ignoring message and sending list of all clients to topic {}", allClientsTopic);
-        throw new OnPublishReceivedException("This message should not be published", false);
+            redirectPublish(allClientsTopic, publish);
 
+            logger.info("Ignoring message and sending list of all clients to topic {}", allClientsTopic);
+            throw new OnPublishReceivedException("This message should not be published", false);
+        }
     }
 
     /**
