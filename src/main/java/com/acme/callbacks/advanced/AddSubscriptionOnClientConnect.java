@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.acme.callbacks;
+package com.acme.callbacks.advanced;
 
 import com.dcsquare.hivemq.spi.callback.CallbackPriority;
 import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;
 import com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException;
 import com.dcsquare.hivemq.spi.message.CONNECT;
+import com.dcsquare.hivemq.spi.message.QoS;
+import com.dcsquare.hivemq.spi.message.Topic;
 import com.dcsquare.hivemq.spi.security.ClientData;
+import com.dcsquare.hivemq.spi.services.SubscriptionStore;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,28 +32,41 @@ import org.slf4j.LoggerFactory;
  * This class is an acme of a callback, which is invoked every time a new client is
  * successfully authenticated. The callback can be used to execute some custom behavior,
  * which is necessary when a new client connects or to implement a custom logic based
- * on the {@link CONNECT} to refuse the connection throwing a
- * {@link RefusedConnectionException}.
+ * on the {@link com.dcsquare.hivemq.spi.message.CONNECT} to refuse the connection throwing a
+ * {@link com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException}.
+ *
+ * The callback adds a individual subscription to devices/{clientId}/sensor for each connecting client.
  *
  * @author Christian Goetz
  */
-public class ClientConnect implements OnConnectCallback {
+public class AddSubscriptionOnClientConnect implements OnConnectCallback {
 
-    Logger log = LoggerFactory.getLogger(ClientConnect.class);
+    private final SubscriptionStore subscriptionStore;
+    Logger log = LoggerFactory.getLogger(AddSubscriptionOnClientConnect.class);
+
+    @Inject
+    public AddSubscriptionOnClientConnect(final SubscriptionStore subscriptionStore) {
+        this.subscriptionStore = subscriptionStore;
+    }
 
     /**
      * This is the callback method, which is called by the HiveMQ core, if a client has sent,
-     * a {@link CONNECT} Message and was successfully authenticated. In this acme there is only
+     * a {@link com.dcsquare.hivemq.spi.message.CONNECT} Message and was successfully authenticated. In this acme there is only
      * a logging statement, normally the behavior would be implemented in here.
      *
-     * @param connect    The {@link CONNECT} message from the client.
+     * @param connect    The {@link com.dcsquare.hivemq.spi.message.CONNECT} message from the client.
      * @param clientData Useful information about the clients authentication state and credentials.
-     * @throws RefusedConnectionException This exception should be thrown, if the client is
+     * @throws com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException This exception should be thrown, if the client is
      *                                    not allowed to connect.
      */
     @Override
     public void onConnect(CONNECT connect, ClientData clientData) throws RefusedConnectionException {
-        log.info("Client {} is connecting", clientData.getClientId());
+        final String clientId = clientData.getClientId();
+
+        log.info("Client {} is connecting", clientId);
+
+        // Adding a subscription without automatically for the client
+        addClientToTopic(clientId,"devices/"+ clientId +"/sensor");
     }
 
     /**
@@ -61,5 +78,13 @@ public class ClientConnect implements OnConnectCallback {
     @Override
     public int priority() {
         return CallbackPriority.MEDIUM;
+    }
+
+    /**
+     * Add a Subscription for a certain client
+     */
+    private void addClientToTopic(String clientId, String topic) {
+        subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(0)));
+        log.info("Added subscription to {} for client {}", topic, clientId);
     }
 }
