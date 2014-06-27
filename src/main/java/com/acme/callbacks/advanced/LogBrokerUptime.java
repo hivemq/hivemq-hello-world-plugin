@@ -55,6 +55,6 @@ public class LogBrokerUptime implements com.dcsquare.hivemq.spi.callback.schedul
     @Override
     public String cronExpression() {
         // Every 50 seconds
-        return "0/50 * * * * ?";
+        return "50 * * * * ?";
     }
 }
