@@ -86,7 +86,7 @@ public class AddBridgeOnHiveMQStart implements OnBrokerStart {
         final Bridge exampleBridge = new Bridge();
         exampleBridge.setConnectionName("BridgeConnection");
         exampleBridge.setClientId("bridgeClient");
-        exampleBridge.setStartType(StartType.ONCE);
+        exampleBridge.setStartType(StartType.MANUAL);
         exampleBridge.setTryPrivate(true);
 
         exampleBridge.setCleanSession(true);
