@@ -16,12 +16,21 @@ We strongly recommend to read the {hivemq-plugin-docs-link}[HiveMQ Plugin Docume
 
 === What you'll get
 
-This Hello World plugin implements a few HiveMQ Callbacks to get you started:
+This Hello World plugin implements a few simple HiveMQ Callbacks to get you started:
 
 * A callback when a client connects
 * A callback when a client disconnects
 * A callback when a client publishes something
 * A callback when HiveMQ starts
+* A scheduled callback that gets executed every 5 sec
+
+There are also some advanced callbacks, which implement more complex use cases:
+
+* A callback that shows how to initialize a bridge connection
+* A callback that shows the Subscription Service
+* A scheduled callback using the SYS Service
+* A scheduled callback using the RetainedMessages Service
+* A callback that shows the Client Service and Publish Service
 
 
 Also, this hello world plugin can reads configurations from a properties file (and reloads it every 5 minutes).
