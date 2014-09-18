@@ -1,8 +1,8 @@
 :hivemq-link: http://www.hivemq.com
-:hivemq-plugin-docs-link: http://www.hivemq.com/docs/plugins/1.4.0/
-:hivemq-plugin-docs-archetype-link: http://www.hivemq.com/docs/plugins/1.4.0/#maven-archetype-chapter
+:hivemq-plugin-docs-link: http://www.hivemq.com/docs/plugins/2.0.0/
+:hivemq-plugin-docs-archetype-link: http://www.hivemq.com/docs/plugins/2.0.0/#maven-archetype-chapter
 :hivemq-blog-tools: http://www.hivemq.com/overview-of-mqtt-client-tools/
-:hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/1.4.0/#hivemqdocs_overview_of_all_callbacks
+:hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/2.0.0/#hivemqdocs_overview_of_all_callbacks
 :github-low-level-callbacks: https://github.com/hivemq/hivemq-spi/tree/master/src/main/java/com/dcsquare/hivemq/spi/callback/lowlevel
 :maven-documentation-profile-link: http://maven.apache.org/guides/introduction/introduction-to-profiles.html
 :hivemq-support-forum: http://www.hivemq.com/support-forum/
