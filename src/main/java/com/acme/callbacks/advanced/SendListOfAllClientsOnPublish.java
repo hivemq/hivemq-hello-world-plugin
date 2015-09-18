@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 dc-square GmbH
+ * Copyright 2015 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package com.acme.callbacks.advanced;
 
-import com.dcsquare.hivemq.spi.callback.CallbackPriority;
-import com.dcsquare.hivemq.spi.callback.events.OnPublishReceivedCallback;
-import com.dcsquare.hivemq.spi.callback.exception.OnPublishReceivedException;
-import com.dcsquare.hivemq.spi.message.PUBLISH;
-import com.dcsquare.hivemq.spi.security.ClientData;
-import com.dcsquare.hivemq.spi.services.ClientService;
-import com.dcsquare.hivemq.spi.services.PublishService;
+import com.hivemq.spi.callback.CallbackPriority;
+import com.hivemq.spi.callback.events.OnPublishReceivedCallback;
+import com.hivemq.spi.callback.exception.OnPublishReceivedException;
+import com.hivemq.spi.message.PUBLISH;
+import com.hivemq.spi.security.ClientData;
+import com.hivemq.spi.services.ClientService;
+import com.hivemq.spi.services.PublishService;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -31,13 +31,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 
 /**
- * This class implements the {@link com.dcsquare.hivemq.spi.callback.events.OnPublishReceivedCallback}, which is triggered everytime
+ * This class implements the {@link com.hivemq.spi.callback.events.OnPublishReceivedCallback}, which is triggered everytime
  * a new message is published to the broker. This callback enables a custom handling of a
  * MQTT message, for acme saving to a database.
  * <p/>
  * Addtionally this callback shows how the PublishService can be used to republish messages on other topics.
  *
- * @author Christian Goetz
+ * @author Christian Götz
  */
 public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback {
 
@@ -54,12 +54,12 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
     }
 
     /**
-     * This method is called from the HiveMQ, when a new MQTT {@link com.dcsquare.hivemq.spi.message.PUBLISH} message arrives
+     * This method is called from the HiveMQ, when a new MQTT {@link com.hivemq.spi.message.PUBLISH} message arrives
      * at the broker. In this acme the method is just logging each message to the console.
      *
      * @param publish    The publish message send by the client.
      * @param clientData Useful information about the clients authentication state and credentials.
-     * @throws com.dcsquare.hivemq.spi.callback.exception.OnPublishReceivedException
+     * @throws com.hivemq.spi.callback.exception.OnPublishReceivedException
      *          When the exception is thrown, the publish is not
      *          accepted and will NOT be delivered to the subscribing clients.
      */
@@ -94,7 +94,7 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
     private String getAllClients() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        final Set<String> connectedClients = clientService.getConnectedClients();
+        final Set<String> connectedClients = clientService.getLocalConnectedClients();
         for (String connectedClient : connectedClients) {
             stringBuilder.append(connectedClient).append(",");
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 dc-square GmbH
+ * Copyright 2015 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package com.acme.callbacks;
 
-import com.dcsquare.hivemq.spi.callback.CallbackPriority;
-import com.dcsquare.hivemq.spi.callback.events.broker.OnBrokerStart;
-import com.dcsquare.hivemq.spi.callback.exception.BrokerUnableToStartException;
+import com.acme.configuration.Configuration;
+import com.google.inject.Inject;
+import com.hivemq.spi.callback.CallbackPriority;
+import com.hivemq.spi.callback.events.broker.OnBrokerStart;
+import com.hivemq.spi.callback.exception.BrokerUnableToStartException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +28,17 @@ import org.slf4j.LoggerFactory;
  * This class implements the {@link OnBrokerStart} callback, which is invoked when HiveMQ is
  * starting. It can be used to execute custom plugin or system initialization stuff.
  *
- * @author Christian Goetz
+ * @author Christian Götz
  */
 public class HiveMQStart implements OnBrokerStart {
 
+    private final Configuration pluginConfiguration;
     Logger log = LoggerFactory.getLogger(HiveMQStart.class);
+
+    @Inject
+    public HiveMQStart(Configuration pluginConfiguration) {
+        this.pluginConfiguration = pluginConfiguration;
+    }
 
     /**
      * This method is called from HiveMQ, and the custom behaviour has to be implemented in here.
@@ -42,6 +50,7 @@ public class HiveMQStart implements OnBrokerStart {
     @Override
     public void onBrokerStart() throws BrokerUnableToStartException {
         log.info("HiveMQ is starting");
+        log.info("Property from property file is: " + pluginConfiguration.getMyProperty());
     }
 
 

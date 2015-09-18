@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 dc-square GmbH
+ * Copyright 2015 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,11 @@ package com.acme.plugin;
 
 import com.acme.callbacks.*;
 import com.acme.callbacks.advanced.*;
-import com.dcsquare.hivemq.spi.PluginEntryPoint;
-import com.dcsquare.hivemq.spi.callback.registry.CallbackRegistry;
-import com.dcsquare.hivemq.spi.message.QoS;
-import com.dcsquare.hivemq.spi.message.RetainedMessage;
-import com.dcsquare.hivemq.spi.services.RetainedMessageStore;
-import org.apache.commons.configuration.Configuration;
+import com.hivemq.spi.PluginEntryPoint;
+import com.hivemq.spi.callback.registry.CallbackRegistry;
+import com.hivemq.spi.message.QoS;
+import com.hivemq.spi.message.RetainedMessage;
+import com.hivemq.spi.services.RetainedMessageStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +31,12 @@ import javax.inject.Inject;
 
 /**
  * This is the main class of the plugin, which is instanciated during the HiveMQ start up process.
+ *
+ * @author Christian Götz
  */
 public class HelloWorldMainClass extends PluginEntryPoint {
 
     Logger log = LoggerFactory.getLogger(HelloWorldMainClass.class);
-
-    private final Configuration configuration;
 
     private final RetainedMessageStore retainedMessageStore;
 
@@ -47,23 +46,17 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final ScheduledClearRetainedCallback scheduledClearRetainedCallback;
     private final AddSubscriptionOnClientConnect addSubscriptionOnClientConnect;
     private final SendListOfAllClientsOnPublish sendListOfAllClientsOnPublish;
-    private final AddBridgeOnHiveMQStart addBridgeOnHiveMQStart;
-    private final LogBrokerUptime logBrokerUptime;
+    private final HiveMQStart hiveMQStart;
 
-    /**
-     * @param configuration Injected configuration, which is declared in the {@link HelloWorldPluginModule}.
-     */
 
     @Inject
-    public HelloWorldMainClass(Configuration configuration, final RetainedMessageStore retainedMessageStore,
+    public HelloWorldMainClass(final RetainedMessageStore retainedMessageStore,
                                final ClientConnect clientConnect, final PublishReceived publishReceived,
                                final SimpleScheduledCallback simpleScheduledCallback,
                                final ScheduledClearRetainedCallback scheduledClearRetainedCallback,
                                final AddSubscriptionOnClientConnect addSubscriptionOnClientConnect,
                                final SendListOfAllClientsOnPublish sendListOfAllClientsOnPublish,
-                               final AddBridgeOnHiveMQStart addBridgeOnHiveMQStart,
-                               final LogBrokerUptime logBrokerUptime) {
-        this.configuration = configuration;
+                               final HiveMQStart hiveMQStart){
         this.retainedMessageStore = retainedMessageStore;
         this.clientConnect = clientConnect;
         this.publishReceived = publishReceived;
@@ -71,8 +64,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
         this.scheduledClearRetainedCallback = scheduledClearRetainedCallback;
         this.addSubscriptionOnClientConnect = addSubscriptionOnClientConnect;
         this.sendListOfAllClientsOnPublish = sendListOfAllClientsOnPublish;
-        this.addBridgeOnHiveMQStart = addBridgeOnHiveMQStart;
-        this.logBrokerUptime = logBrokerUptime;
+        this.hiveMQStart = hiveMQStart;
     }
 
     /**
@@ -83,8 +75,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     public void postConstruct() {
 
         CallbackRegistry callbackRegistry = getCallbackRegistry();
-
-        callbackRegistry.addCallback(new HiveMQStart());
+        callbackRegistry.addCallback(hiveMQStart);
         callbackRegistry.addCallback(clientConnect);
         callbackRegistry.addCallback(new ClientDisconnect());
         callbackRegistry.addCallback(publishReceived);
@@ -92,10 +83,6 @@ public class HelloWorldMainClass extends PluginEntryPoint {
         callbackRegistry.addCallback(scheduledClearRetainedCallback);
         callbackRegistry.addCallback(addSubscriptionOnClientConnect);
         callbackRegistry.addCallback(sendListOfAllClientsOnPublish);
-        callbackRegistry.addCallback(addBridgeOnHiveMQStart);
-        callbackRegistry.addCallback(logBrokerUptime);
-
-        log.info("Plugin configuration property: {}", configuration.getString("myProperty"));
 
         addRetainedMessage("/default", "Hello World.");
     }

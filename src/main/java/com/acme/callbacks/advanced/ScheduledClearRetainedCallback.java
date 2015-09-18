@@ -1,7 +1,23 @@
+/*
+ * Copyright 2015 dc-square GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.acme.callbacks.advanced;
 
-import com.dcsquare.hivemq.spi.message.RetainedMessage;
-import com.dcsquare.hivemq.spi.services.RetainedMessageStore;
+import com.hivemq.spi.message.RetainedMessage;
+import com.hivemq.spi.services.RetainedMessageStore;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +30,9 @@ import java.util.Set;
  *
  * In this example the callback is used to clear all retained messages every 30 seconds.
  *
- * @author Christian Goetz
+ * @author Christian Götz
  */
-public class ScheduledClearRetainedCallback implements com.dcsquare.hivemq.spi.callback.schedule.ScheduledCallback {
+public class ScheduledClearRetainedCallback implements com.hivemq.spi.callback.schedule.ScheduledCallback {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledClearRetainedCallback.class);
     private final RetainedMessageStore retainedMessageStore;
@@ -35,22 +51,9 @@ public class ScheduledClearRetainedCallback implements com.dcsquare.hivemq.spi.c
         log.info("All retained messages have been cleared!");
     }
 
-    /**
-     * This method returns the quartz-like cron expression for the callback.
-     * <p/>
-     * Note that this method only gets called once when adding the callback to the
-     * {@link com.dcsquare.hivemq.spi.callback.registry.CallbackRegistry}. If you have dynamic
-     * cron expressions in this method, you must manually call the
-     * {@link com.dcsquare.hivemq.spi.callback.registry.CallbackRegistry#reloadScheduledCallbackExpression(ScheduledCallback)}
-     * method in order to reload the expression
-     *
-     * @return a String which contains the quartz-like cron expressions.
-     * @see <a href="http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html">
-     *      Documentation for quartz cron expressions</a>
-     */
     @Override
     public String cronExpression() {
-        // Every 30 seconds
-        return "0/30 * * * * ?";
+        // Every 40 seconds
+        return "0/40 * * * * ?";
     }
 }

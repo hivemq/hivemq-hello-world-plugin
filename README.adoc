@@ -27,9 +27,7 @@ This Hello World plugin implements a few simple HiveMQ Callbacks to get you star
 
 There are also some advanced callbacks, which implement more complex use cases:
 
-* A callback that shows how to initialize a bridge connection
 * A callback that shows the Subscription Service
-* A scheduled callback using the SYS Service
 * A scheduled callback using the RetainedMessages Service
 * A callback that shows the Client Service and Publish Service
 

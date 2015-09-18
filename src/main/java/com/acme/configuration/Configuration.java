@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 
-package com.acme.callbacks;
+package com.acme.configuration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.inject.Inject;
+
+import java.util.Properties;
 
 /**
  * @author Christian Götz
  */
-public class SimpleScheduledCallback implements com.hivemq.spi.callback.schedule.ScheduledCallback {
+public class Configuration {
 
-    private static final Logger log = LoggerFactory.getLogger(SimpleScheduledCallback.class);
 
-    @Override
-    public void execute() {
-        log.info("Scheduled Callback is doing maintenance!");
+    private final Properties properties;
+
+    @Inject
+    public Configuration(PluginReader pluginReader) {
+        properties = pluginReader.getProperties();
     }
 
-    @Override
-    public String cronExpression() {
-        // Every 5 seconds
-        return "0/5 * * * * ?";
+    public String getMyProperty() {
+        if (properties == null) {
+            return null;
+        }
+
+        return properties.getProperty("myProperty");
     }
 }

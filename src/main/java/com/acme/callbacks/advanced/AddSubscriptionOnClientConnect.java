@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 dc-square GmbH
+ * Copyright 2015 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package com.acme.callbacks.advanced;
 
-import com.dcsquare.hivemq.spi.callback.CallbackPriority;
-import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;
-import com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException;
-import com.dcsquare.hivemq.spi.message.CONNECT;
-import com.dcsquare.hivemq.spi.message.QoS;
-import com.dcsquare.hivemq.spi.message.Topic;
-import com.dcsquare.hivemq.spi.security.ClientData;
-import com.dcsquare.hivemq.spi.services.SubscriptionStore;
+import com.hivemq.spi.callback.CallbackPriority;
+import com.hivemq.spi.callback.events.OnConnectCallback;
+import com.hivemq.spi.callback.exception.RefusedConnectionException;
+import com.hivemq.spi.message.CONNECT;
+import com.hivemq.spi.message.QoS;
+import com.hivemq.spi.message.Topic;
+import com.hivemq.spi.security.ClientData;
+import com.hivemq.spi.services.SubscriptionStore;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +32,12 @@ import org.slf4j.LoggerFactory;
  * This class is an acme of a callback, which is invoked every time a new client is
  * successfully authenticated. The callback can be used to execute some custom behavior,
  * which is necessary when a new client connects or to implement a custom logic based
- * on the {@link com.dcsquare.hivemq.spi.message.CONNECT} to refuse the connection throwing a
- * {@link com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException}.
+ * on the {@link com.hivemq.spi.message.CONNECT} to refuse the connection throwing a
+ * {@link com.hivemq.spi.callback.exception.RefusedConnectionException}.
  *
  * The callback adds a individual subscription to devices/{clientId}/sensor for each connecting client.
  *
- * @author Christian Goetz
+ * @author Christian Götz
  */
 public class AddSubscriptionOnClientConnect implements OnConnectCallback {
 
@@ -51,12 +51,12 @@ public class AddSubscriptionOnClientConnect implements OnConnectCallback {
 
     /**
      * This is the callback method, which is called by the HiveMQ core, if a client has sent,
-     * a {@link com.dcsquare.hivemq.spi.message.CONNECT} Message and was successfully authenticated. In this acme there is only
+     * a {@link com.hivemq.spi.message.CONNECT} Message and was successfully authenticated. In this acme there is only
      * a logging statement, normally the behavior would be implemented in here.
      *
-     * @param connect    The {@link com.dcsquare.hivemq.spi.message.CONNECT} message from the client.
+     * @param connect    The {@link com.hivemq.spi.message.CONNECT} message from the client.
      * @param clientData Useful information about the clients authentication state and credentials.
-     * @throws com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException This exception should be thrown, if the client is
+     * @throws com.hivemq.spi.callback.exception.RefusedConnectionException This exception should be thrown, if the client is
      *                                    not allowed to connect.
      */
     @Override

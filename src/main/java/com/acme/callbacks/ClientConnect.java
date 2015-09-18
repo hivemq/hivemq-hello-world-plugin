@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 dc-square GmbH
+ * Copyright 2015 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package com.acme.callbacks;
 
-import com.dcsquare.hivemq.spi.callback.CallbackPriority;
-import com.dcsquare.hivemq.spi.callback.events.OnConnectCallback;
-import com.dcsquare.hivemq.spi.callback.exception.RefusedConnectionException;
-import com.dcsquare.hivemq.spi.message.CONNECT;
-import com.dcsquare.hivemq.spi.security.ClientData;
+import com.hivemq.spi.callback.CallbackPriority;
+import com.hivemq.spi.callback.events.OnConnectCallback;
+import com.hivemq.spi.callback.exception.RefusedConnectionException;
+import com.hivemq.spi.message.CONNECT;
+import com.hivemq.spi.security.ClientData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * on the {@link CONNECT} to refuse the connection throwing a
  * {@link RefusedConnectionException}.
  *
- * @author Christian Goetz
+ * @author Christian Götz
  */
 public class ClientConnect implements OnConnectCallback {
 
