@@ -21,7 +21,7 @@
 
     <groupId>hivemq-hello-world-plugin</groupId>
     <artifactId>hivemq-hello-world-plugin</artifactId>
-    <version>2.1</version>
+    <version>3.0</version>
 
     <description>HiveMQ Hello World Plugin - a reference for all plugin developer</description>
 
