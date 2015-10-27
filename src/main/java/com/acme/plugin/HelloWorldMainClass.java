@@ -41,6 +41,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final RetainedMessageStore retainedMessageStore;
 
     private final ClientConnect clientConnect;
+    private final ClientDisconnect clientDisconnect;
     private final PublishReceived publishReceived;
     private final SimpleScheduledCallback simpleScheduledCallback;
     private final ScheduledClearRetainedCallback scheduledClearRetainedCallback;
@@ -48,10 +49,11 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final SendListOfAllClientsOnPublish sendListOfAllClientsOnPublish;
     private final HiveMQStart hiveMQStart;
 
-
     @Inject
     public HelloWorldMainClass(final RetainedMessageStore retainedMessageStore,
-                               final ClientConnect clientConnect, final PublishReceived publishReceived,
+                               final ClientConnect clientConnect,
+                               final ClientDisconnect clientDisconnect,
+                               final PublishReceived publishReceived,
                                final SimpleScheduledCallback simpleScheduledCallback,
                                final ScheduledClearRetainedCallback scheduledClearRetainedCallback,
                                final AddSubscriptionOnClientConnect addSubscriptionOnClientConnect,
@@ -59,6 +61,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
                                final HiveMQStart hiveMQStart){
         this.retainedMessageStore = retainedMessageStore;
         this.clientConnect = clientConnect;
+        this.clientDisconnect = clientDisconnect;
         this.publishReceived = publishReceived;
         this.simpleScheduledCallback = simpleScheduledCallback;
         this.scheduledClearRetainedCallback = scheduledClearRetainedCallback;
@@ -77,7 +80,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
         CallbackRegistry callbackRegistry = getCallbackRegistry();
         callbackRegistry.addCallback(hiveMQStart);
         callbackRegistry.addCallback(clientConnect);
-        callbackRegistry.addCallback(new ClientDisconnect());
+        callbackRegistry.addCallback(clientDisconnect);
         callbackRegistry.addCallback(publishReceived);
         callbackRegistry.addCallback(simpleScheduledCallback);
         callbackRegistry.addCallback(scheduledClearRetainedCallback);
