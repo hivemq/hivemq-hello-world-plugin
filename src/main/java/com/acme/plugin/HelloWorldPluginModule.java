@@ -19,9 +19,7 @@ package com.acme.plugin;
 import com.hivemq.spi.HiveMQPluginModule;
 import com.hivemq.spi.PluginEntryPoint;
 import com.hivemq.spi.plugin.meta.Information;
-import com.google.inject.Provider;
 
-import java.util.concurrent.TimeUnit;
 
 
 /**

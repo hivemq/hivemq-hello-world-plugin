@@ -62,6 +62,8 @@
                                     <exclude>com.google.guava:*</exclude>
                                     <exclude>org.slf4j:*</exclude>
                                     <exclude>ch.qos.logback:*</exclude>
+                                    <exclude>javax.ws.rs:*</exclude>
+                                    <exclude>javax.servlet:*</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
