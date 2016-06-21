@@ -1,11 +1,10 @@
 :hivemq-link: http://www.hivemq.com
-:hivemq-plugin-docs-link: http://www.hivemq.com/docs/plugins/2.0.0/
-:hivemq-plugin-docs-archetype-link: http://www.hivemq.com/docs/plugins/2.0.0/#maven-archetype-chapter
-:hivemq-blog-tools: http://www.hivemq.com/overview-of-mqtt-client-tools/
-:hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/2.0.0/#hivemqdocs_overview_of_all_callbacks
-:github-low-level-callbacks: https://github.com/hivemq/hivemq-spi/tree/master/src/main/java/com/dcsquare/hivemq/spi/callback/lowlevel
+:hivemq-plugin-docs-link: http://www.hivemq.com/docs/plugins/latest/
+:hivemq-plugin-docs-archetype-link: http://www.hivemq.com/docs/plugins/latest/#maven-archetype-chapter
+:hivemq-blog-tools: http://www.hivemq.com/mqtt-toolbox
+:hivemq-callbacks-overview-link: http://www.hivemq.com/docs/plugins/latest/#hivemqdocs_overview_of_all_callbacks
 :maven-documentation-profile-link: http://maven.apache.org/guides/introduction/introduction-to-profiles.html
-:hivemq-support-forum: http://www.hivemq.com/support-forum/
+:hivemq-support: http://www.hivemq.com/support/
 
 == HiveMQ Hello World Plugin
 
@@ -51,11 +50,11 @@ The plugin is documented with javadoc which explains what's going on. Please don
 
 Awesome, you got your first HiveMQ plugin working. Now grab a coffee and prepare for the next steps:
 
-* Read about the available HiveMQ callbacks {hivemq-callbacks-overview-link}[here]. (There are also low level protocol callbacks available. See {github-low-level-callbacks}[https://github.com/hivemq/hivemq-spi/tree/master/src/main/java/com/dcsquare/hivemq/spi/callback/lowlevel])
+* Read about the available HiveMQ callbacks {hivemq-callbacks-overview-link}[here].
 * Implement a great plugin. Bring your JDBC driver and do some database fun. Integrate with your favourite web service. There are no limits :-)
 * Blog about your awesome plugin. Tell us and if you like we can add your plugin to the plugin registry on http://www.hivemq.com
 
 
 === Need help?
 
-If you encounter any problems, we are happy to help. The best place to get in contact is our {hivemq-support-forum}[support forum].
+If you encounter any problems, we are happy to help. The best place to get in contact is our {hivemq-support}[support].
