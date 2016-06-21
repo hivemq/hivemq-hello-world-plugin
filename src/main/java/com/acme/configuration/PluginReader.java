@@ -47,25 +47,24 @@ public class PluginReader {
     @PostConstruct
     public void postConstruct()
     {
-        final File pluginFolder = systemInformation.getPluginFolder();
+        final File configFolder = systemInformation.getConfigFolder();
 
-        final File pluginFile = new File(pluginFolder, "myPlugin1.properties");
+        final File configFile = new File(configFolder, "myPlugin.properties");
 
-        if (!pluginFile.canRead()) {
-            log.error("Could not read the properties file {}", pluginFile.getAbsolutePath());
+        if (!configFile.canRead()) {
+            log.error("Could not read the properties file {}", configFile.getAbsolutePath());
             return;
         }
 
-        try (InputStream is = new FileInputStream(pluginFile)) {
+        try (InputStream is = new FileInputStream(configFile)) {
 
-            log.debug("Reading property file {}", pluginFile.getAbsolutePath());
+            log.debug("Reading property file {}", configFile.getAbsolutePath());
 
             properties.load(is);
 
 
         } catch (IOException e) {
-            log.error("An error occurred while reading the properties file {}", pluginFile.getAbsolutePath(), e);
-            return;
+            log.error("An error occurred while reading the properties file {}", configFile.getAbsolutePath(), e);
         }
     }
 
