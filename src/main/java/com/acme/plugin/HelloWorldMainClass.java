@@ -22,6 +22,7 @@ import com.hivemq.spi.PluginEntryPoint;
 import com.hivemq.spi.callback.registry.CallbackRegistry;
 import com.hivemq.spi.message.QoS;
 import com.hivemq.spi.message.RetainedMessage;
+import com.hivemq.spi.services.BlockingRetainedMessageStore;
 import com.hivemq.spi.services.RetainedMessageStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
 
     Logger log = LoggerFactory.getLogger(HelloWorldMainClass.class);
 
-    private final RetainedMessageStore retainedMessageStore;
+    private final BlockingRetainedMessageStore retainedMessageStore;
 
     private final ClientConnect clientConnect;
     private final ClientDisconnect clientDisconnect;
@@ -50,7 +51,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final HiveMQStart hiveMQStart;
 
     @Inject
-    public HelloWorldMainClass(final RetainedMessageStore retainedMessageStore,
+    public HelloWorldMainClass(final BlockingRetainedMessageStore retainedMessageStore,
                                final ClientConnect clientConnect,
                                final ClientDisconnect clientDisconnect,
                                final PublishReceived publishReceived,
@@ -95,7 +96,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
      */
     public void addRetainedMessage(String topic, String message) {
 
-        if (!retainedMessageStore.contains(new RetainedMessage(topic, new byte[]{}, QoS.valueOf(0))))
+        if (!retainedMessageStore.contains(topic))
             retainedMessageStore.addOrReplace(new RetainedMessage(topic, message.getBytes(), QoS.valueOf(1)));
     }
 }

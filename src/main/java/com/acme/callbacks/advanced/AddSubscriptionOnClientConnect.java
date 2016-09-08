@@ -16,6 +16,9 @@
 
 package com.acme.callbacks.advanced;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.spi.callback.CallbackPriority;
 import com.hivemq.spi.callback.events.OnConnectCallback;
 import com.hivemq.spi.callback.exception.RefusedConnectionException;
@@ -23,6 +26,7 @@ import com.hivemq.spi.message.CONNECT;
 import com.hivemq.spi.message.QoS;
 import com.hivemq.spi.message.Topic;
 import com.hivemq.spi.security.ClientData;
+import com.hivemq.spi.services.AsyncSubscriptionStore;
 import com.hivemq.spi.services.SubscriptionStore;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -34,18 +38,22 @@ import org.slf4j.LoggerFactory;
  * which is necessary when a new client connects or to implement a custom logic based
  * on the {@link com.hivemq.spi.message.CONNECT} to refuse the connection throwing a
  * {@link com.hivemq.spi.callback.exception.RefusedConnectionException}.
- *
+ * <p>
  * The callback adds a individual subscription to devices/{clientId}/sensor for each connecting client.
+ * <p>
+ * The callback is using the new, as of SPI 3.1.0, async services.
+ * <p>
  *
  * @author Christian Götz
+ * @author Georg Held
  */
 public class AddSubscriptionOnClientConnect implements OnConnectCallback {
 
-    private final SubscriptionStore subscriptionStore;
+    private final AsyncSubscriptionStore subscriptionStore;
     Logger log = LoggerFactory.getLogger(AddSubscriptionOnClientConnect.class);
 
     @Inject
-    public AddSubscriptionOnClientConnect(final SubscriptionStore subscriptionStore) {
+    public AddSubscriptionOnClientConnect(final AsyncSubscriptionStore subscriptionStore) {
         this.subscriptionStore = subscriptionStore;
     }
 
@@ -57,7 +65,7 @@ public class AddSubscriptionOnClientConnect implements OnConnectCallback {
      * @param connect    The {@link com.hivemq.spi.message.CONNECT} message from the client.
      * @param clientData Useful information about the clients authentication state and credentials.
      * @throws com.hivemq.spi.callback.exception.RefusedConnectionException This exception should be thrown, if the client is
-     *                                    not allowed to connect.
+     *                                                                      not allowed to connect.
      */
     @Override
     public void onConnect(CONNECT connect, ClientData clientData) throws RefusedConnectionException {
@@ -66,7 +74,7 @@ public class AddSubscriptionOnClientConnect implements OnConnectCallback {
         log.info("Client {} is connecting", clientId);
 
         // Adding a subscription without automatically for the client
-        addClientToTopic(clientId,"devices/"+ clientId +"/sensor");
+        addClientToTopic(clientId, "devices/" + clientId + "/sensor");
     }
 
     /**
@@ -83,8 +91,22 @@ public class AddSubscriptionOnClientConnect implements OnConnectCallback {
     /**
      * Add a Subscription for a certain client
      */
-    private void addClientToTopic(String clientId, String topic) {
-        subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(0)));
-        log.info("Added subscription to {} for client {}", topic, clientId);
+    private void addClientToTopic(final String clientId, final String topic) {
+
+        //The AsyncSubscriptionStore returns a ListenableFuture object
+        final ListenableFuture<Void> adSubscriptionFuture = subscriptionStore.addSubscription(clientId, new Topic(topic, QoS.valueOf(0)));
+
+        //Register callbacks, one for success and one for failure
+        Futures.addCallback(adSubscriptionFuture, new FutureCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                log.info("Added subscription to {} for client {}", topic, clientId);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                log.error("Failed to add subscription to {} for client {} because of {}", topic, clientId, t.getCause());
+            }
+        });
     }
 }
