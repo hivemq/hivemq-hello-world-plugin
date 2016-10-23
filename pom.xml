@@ -21,7 +21,7 @@
 
     <groupId>hivemq-hello-world-plugin</groupId>
     <artifactId>hivemq-hello-world-plugin</artifactId>
-    <version>3.0</version>
+    <version>3.1.0</version>
 
     <description>HiveMQ Hello World Plugin - a reference for all plugin developer</description>
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.hivemq</groupId>
             <artifactId>hivemq-spi</artifactId>
-            <version>3.0.0</version>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 

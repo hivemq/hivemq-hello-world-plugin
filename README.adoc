@@ -10,7 +10,7 @@
 
 === Purpose
 
-This Hello World plugin can be used as a foundation for writing your (first) {hivemq-link}[HiveMQ] plugin. Although {hivemq-plugin-docs-archetype-link}[there is a Maven Archetype available] to generate your Hello World plugin right from the IDE, you can use this example project if you don't like to use the Archetype.
+This Hello World plugin is a showcase for the kind of functionality that is possible within the {hivemq-link}[HiveMQ] plugin environment. There is {hivemq-plugin-docs-archetype-link}[a Maven Archetype available] to generate a much more basic plugin from the IDE.
 
 We strongly recommend to read the {hivemq-plugin-docs-link}[HiveMQ Plugin Documentation] to grasp the core concepts of HiveMQ plugin development.
 
@@ -26,7 +26,7 @@ This Hello World plugin implements a few simple HiveMQ Callbacks to get you star
 
 There are also some advanced callbacks, which implement more complex use cases:
 
-* A callback that shows the Subscription Service
+* A callback that shows the async Subscription Service
 * A scheduled callback using the RetainedMessages Service
 * A callback that shows the Client Service and Publish Service
 

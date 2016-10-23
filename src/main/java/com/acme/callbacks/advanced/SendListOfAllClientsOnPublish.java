@@ -21,7 +21,9 @@ import com.hivemq.spi.callback.events.OnPublishReceivedCallback;
 import com.hivemq.spi.callback.exception.OnPublishReceivedException;
 import com.hivemq.spi.message.PUBLISH;
 import com.hivemq.spi.security.ClientData;
+import com.hivemq.spi.services.BlockingClientService;
 import com.hivemq.spi.services.ClientService;
+import com.hivemq.spi.services.PluginExecutorService;
 import com.hivemq.spi.services.PublishService;
 import com.google.common.base.Charsets;
 import com.google.inject.Inject;
@@ -44,11 +46,11 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
     Logger logger = LoggerFactory.getLogger(SendListOfAllClientsOnPublish.class);
 
     private final PublishService publishService;
-    private final ClientService clientService;
+    private final BlockingClientService clientService;
     private final String allClientsTopic = "broker/all/clients";
 
     @Inject
-    public SendListOfAllClientsOnPublish(final PublishService publishService, final ClientService clientService) {
+    public SendListOfAllClientsOnPublish(final PublishService publishService, final BlockingClientService clientService) {
         this.publishService = publishService;
         this.clientService = clientService;
     }
@@ -59,12 +61,11 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
      *
      * @param publish    The publish message send by the client.
      * @param clientData Useful information about the clients authentication state and credentials.
-     * @throws com.hivemq.spi.callback.exception.OnPublishReceivedException
-     *          When the exception is thrown, the publish is not
-     *          accepted and will NOT be delivered to the subscribing clients.
+     * @throws com.hivemq.spi.callback.exception.OnPublishReceivedException When the exception is thrown, the publish is not
+     *                                                                      accepted and will NOT be delivered to the subscribing clients.
      */
     @Override
-    public void onPublishReceived(PUBLISH publish, ClientData clientData) throws OnPublishReceivedException {
+    public void onPublishReceived(final PUBLISH publish, final ClientData clientData) throws OnPublishReceivedException {
         if (publish.getTopic().equals("fetch/all/clients")) {
 
             String clientID = clientData.getClientId();
@@ -78,12 +79,12 @@ public class SendListOfAllClientsOnPublish implements OnPublishReceivedCallback 
             publish.setPayload(allClients.getBytes(Charsets.UTF_8));
 
             // This redirects the message with the help of the PublishService
-
             redirectPublish(allClientsTopic, publish);
 
             logger.info("Ignoring message and sending list of all clients to topic {}", allClientsTopic);
             throw new OnPublishReceivedException("This message should not be published", false);
         }
+
     }
 
     /**
