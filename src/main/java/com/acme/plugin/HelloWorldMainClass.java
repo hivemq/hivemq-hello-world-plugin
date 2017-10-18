@@ -17,13 +17,11 @@
 package com.acme.plugin;
 
 import com.acme.callbacks.*;
-import com.acme.callbacks.advanced.*;
+import com.acme.callbacks.advanced.AddSubscriptionOnClientConnect;
+import com.acme.callbacks.advanced.ScheduledClearRetainedCallback;
+import com.acme.callbacks.advanced.SendListOfAllClientsOnPublish;
 import com.hivemq.spi.PluginEntryPoint;
 import com.hivemq.spi.callback.registry.CallbackRegistry;
-import com.hivemq.spi.message.QoS;
-import com.hivemq.spi.message.RetainedMessage;
-import com.hivemq.spi.services.BlockingRetainedMessageStore;
-import com.hivemq.spi.services.RetainedMessageStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +37,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
 
     Logger log = LoggerFactory.getLogger(HelloWorldMainClass.class);
 
-    private final BlockingRetainedMessageStore retainedMessageStore;
+
 
     private final ClientConnect clientConnect;
     private final ClientDisconnect clientDisconnect;
@@ -51,8 +49,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
     private final HiveMQStart hiveMQStart;
 
     @Inject
-    public HelloWorldMainClass(final BlockingRetainedMessageStore retainedMessageStore,
-                               final ClientConnect clientConnect,
+    public HelloWorldMainClass(final ClientConnect clientConnect,
                                final ClientDisconnect clientDisconnect,
                                final PublishReceived publishReceived,
                                final SimpleScheduledCallback simpleScheduledCallback,
@@ -60,7 +57,7 @@ public class HelloWorldMainClass extends PluginEntryPoint {
                                final AddSubscriptionOnClientConnect addSubscriptionOnClientConnect,
                                final SendListOfAllClientsOnPublish sendListOfAllClientsOnPublish,
                                final HiveMQStart hiveMQStart){
-        this.retainedMessageStore = retainedMessageStore;
+
         this.clientConnect = clientConnect;
         this.clientDisconnect = clientDisconnect;
         this.publishReceived = publishReceived;
@@ -88,15 +85,5 @@ public class HelloWorldMainClass extends PluginEntryPoint {
         callbackRegistry.addCallback(addSubscriptionOnClientConnect);
         callbackRegistry.addCallback(sendListOfAllClientsOnPublish);
 
-        addRetainedMessage("/default", "Hello World.");
-    }
-
-    /**
-     * Programmatically add a new Retained Message.
-     */
-    public void addRetainedMessage(String topic, String message) {
-
-        if (!retainedMessageStore.contains(topic))
-            retainedMessageStore.addOrReplace(new RetainedMessage(topic, message.getBytes(), QoS.valueOf(1)));
     }
 }
