@@ -61,3 +61,11 @@ Awesome, you got your first HiveMQ plugin working. Now grab a coffee and prepare
 === Need help?
 
 If you encounter any problems, we are happy to help. The best place to get in contact is our {hivemq-support}[support].
+
+= Contributing
+
+If you want to contribute to HiveMQ Hello World Plugin, see the link:CONTRIBUTING.md[contribution guidelines].
+
+= License
+
+HiveMQ Hello World Plugin is licensed under the `APACHE LICENSE, VERSION 2.0`. A copy of the license can be found link:LICENSE.txt[here].
